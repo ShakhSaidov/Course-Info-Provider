@@ -1,0 +1,17 @@
+DEPARTMENT
+Psychology
+PSYC 110
+Introduction to Psychological Science
+
+PSYC 120
+Quantitative Methods in Psychology
+PSYC 110
+PSYC 203
+Design and Analysis I
+PSYC 110, PSYC 120
+PSYC 219
+Cross-Cultural Psychology
+PSYC 110
+PSYC 225
+Psychopharmacology
+PSYC 110

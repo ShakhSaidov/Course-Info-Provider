@@ -1,0 +1,35 @@
+DEPARTMENT
+Computer Science
+CS 104
+Introduction to Computer Gaming
+OR MATH 141, MATH 161
+CS 105
+Introduction to Digital Media
+OR MATH 141, MATH 161
+CS 150
+Data Structures & Algorithms
+OR CS 104, CS 105
+CS 200
+Computers and Society
+
+CS 202
+Analysis of Algorithms
+CS 150, MATH 182
+CS 203
+Computer Organization
+CS 150
+CS 205
+Software Engineering
+CS 150
+CS 301
+Principles of Programming Languages
+CS 202, CS 203
+CS 303
+Theory of Computation
+CS 202
+CS 406
+Operating Systems
+OR CS 203, CS 205
+CS 470
+Senior Project
+OR CS 320, CS 305

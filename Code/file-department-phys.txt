@@ -1,0 +1,23 @@
+DEPARTMENT
+Physics
+PHYS 111
+General Physics: Mechanics and Thermodynamics
+OR MATH 141, MATH 161
+PHYS 112
+General Physics: Electricity, Magnetism, and Optics
+OR MATH 141, MATH 161
+PHYS 130
+Relativity, Spacetime, and Contemporary Physics
+MATH 161
+PHYS 131
+Physics I: Mechanics
+MATH 161
+PHYS 133
+Physics II: Electricity, Magnetism and Waves
+PHYS 131, MATH 162
+PHYS 151
+Accelerated Physics I: Mechanics and Thermodynamics
+MATH 161
+PHYS 152
+Accelerated Physics II: Electricity, Magnetism, and Optics
+PHYS 151, MATH 162

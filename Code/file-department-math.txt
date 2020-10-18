@@ -1,0 +1,40 @@
+DEPARTMENT
+Mathematics
+MATH 141
+Financial Math
+
+MATH 161
+Calculus I
+
+MATH 162
+Calculus II
+OR MATH 141, MATH 161, MATH 165
+MATH 182
+Discrete Math
+OR MATH 141, MATH 161
+MATH 186
+Applied Statistics
+OR MATH 141, MATH 161, MATH 165
+MATH 263
+Calculus III
+MATH 262
+MATH 272
+Linear Algebra with Aplications
+MATH 263
+MATH 282
+Techniques of Mathematical Modeling
+MATH 162
+MATH 290
+Transition to Theoretical Mathematics
+MATH 263
+MATH 300
+Vector Spaces
+MATH 290
+MATH 351
+Abstract Algebra I
+MATH 290
+MATH 356
+Introduction to real Analysis
+MATH 290
+MATH 400
+Senior Seminar
