@@ -6,6 +6,7 @@
 **USER INSTRUCTIONS:** 
 Add in "department.txt" and "degree.txt" files in the appropriate format shown by default files. Read the files as shown below:
 - "./project dept1.txt dept2.txt degree1.txt degree2.txt ..."\
+
 Run commands as shown below:\
 - "d DegreeName" - Lists all the courses required to earn the specified degree
 - "c CourseName" - Shows the title of the course and its prerequisites
