@@ -3,7 +3,7 @@
 **VERSION or DATE:** v1.0\
 **HOW TO START THIS PROJECT:** Run in a Linux environment\
 **AUTHORS:** Shakh Saidov\
-**USER INSTRUCTIONS:** 
+**USER INSTRUCTIONS:** \
 Add in "department.txt" and "degree.txt" files in the appropriate format shown by default files. Read the files as shown below:
 - "./project dept1.txt dept2.txt degree1.txt degree2.txt ..."\
 
