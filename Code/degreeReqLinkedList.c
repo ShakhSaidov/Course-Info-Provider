@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "reqLinkedList.h"
 #include "degreeReqLinkedList.h"
 
@@ -51,7 +52,7 @@ void insertDegreeReqLinkedList(degreeReqLinkedList* list, reqLinkedList* l){
  * Function: printDegreeCourses(degreeReqLinkedList* list)
  * --------------------
  * Prints the course-names that are required for the degree
- * list: linked list
+ * list: linked list of degrees to be printed
  */
 void printDegreeCourses(degreeReqLinkedList* list){
   RLNode* iter = list->head;
@@ -62,10 +63,67 @@ void printDegreeCourses(degreeReqLinkedList* list){
 }
 
 /*
+ * Function: void removeCourseFromDegreeReq(degreeReqLinkedList* l, char* n)
+ * --------------------
+ * Removes the given course from the degree requirements list
+ * l: degree requirements list
+ * n: course name to be removed
+ */
+int removeCourseFromDegreeReq(degreeReqLinkedList* l, char* n){
+  RLNode* iter1 = l->head;
+  while(iter1 != NULL){
+    RNode* iter2 = iter1->list->head;
+    while(iter2 != NULL){
+      char* nameToCompare = (char* )calloc(strlen(iter2->name) + 1, sizeof(char));
+      if((iter2->name)[0] == 'O'){                          //if disjunct
+        memcpy(nameToCompare, &((iter2->name)[3]), strlen(iter2->name)-2); 
+      } else {
+        memcpy(nameToCompare, &((iter2->name)[0]), strlen(iter2->name)); 
+      }
+      if(strcmp(nameToCompare, n) == 0){
+        deleteNode(iter1->list, iter2->name);
+        checkDisjunctCondition(iter1->list, "OR ");            //adds an OR if the first disjunct course out of many was removed
+        removeEmptyNode(l);
+        free(nameToCompare);
+        return 1;
+      }
+      free(nameToCompare);
+      iter2 = iter2->next;
+    }
+    iter1 = iter1->next;
+  }
+  return 0;
+}
+
+/*
+ * Function:  removeEmptyNode(degreeReqLinkedList* list) 
+ * --------------------
+ * Deletes empty nodes from the list
+ * list: linked list in focus
+ */
+void removeEmptyNode(degreeReqLinkedList* list){
+  int count = 0;
+  RLNode* current = list->head;           
+  RLNode* previous = current;           
+  while(current != NULL){       
+    if(current->list->size == 0){      
+      previous->next = current->next;
+      if(current == list->head) list->head = current->next;
+      freeRLNode(current);
+      list->size--;  
+      return;
+    }                               
+    previous = current;             
+    current = current->next;
+    count++;        
+  }                               
+} 
+
+/*
  * Function: freeDegreeReqLinkedList(degreeReqLinkedList* list)
  * --------------------
  * Frees heap space used by the strings in list
- * list: linked list
+ * list: linked list to be freed
  */
 void freeDegreeReqLinkedList(degreeReqLinkedList* list){
   RLNode* iter = list->head;
@@ -77,4 +135,15 @@ void freeDegreeReqLinkedList(degreeReqLinkedList* list){
     iter = next;
   }
   free(list);
+}
+
+/*
+ * Function: freeRLNode(RNode* n)
+ * --------------------
+ * Frees heap space used by the node in list
+ * n: node to be freed
+ */
+void freeRLNode(RLNode* n){
+  freeReqLinkedList(n->list);
+  free(n);
 }

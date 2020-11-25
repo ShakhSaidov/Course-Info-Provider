@@ -9,7 +9,7 @@
  * Function: createDegreeArrayList(int s)
  * --------------------
  * Creates an array list of degrees to be used by the caller
- * s: size of array list
+ * s: wanted size for array list
  * Returns: array list of degrees
  */
 degreeArrayList* createDegreeArrayList(int s){
@@ -30,7 +30,7 @@ degreeArrayList* createDegreeArrayList(int s){
  * --------------------
  * Gets the degree at the given index in the array list
  * list: array list of degrees
- * index: the index in array list
+ * index: the index of the element to retrieve
  * Returns: Degree in given index of list
  */
 Degree* getDegree(degreeArrayList* list, int index){
@@ -74,7 +74,7 @@ degreeArrayList* expandDegreeArrayList(degreeArrayList* list, int length){
  * --------------------
  * Searches for a degree with given name in the array list
  * list: array list of degrees
- * name: degree name to be searched for
+ * name: degree to be searched for
  * Returns: Degree with matching name
  */
 Degree* findDegree(degreeArrayList* list, char* name){
@@ -84,6 +84,56 @@ Degree* findDegree(degreeArrayList* list, char* name){
     }
   }
   return NULL;
+}
+
+/*
+ * Function: removeCourseFromDegreeInList(degreeArrayList* list, char* name)
+ * --------------------
+ * Removes the specified course from the specified degree requirements
+ * list: array list of degrees
+ * name: degree and course name in the format of "degreeName, courseName"
+ */
+void removeCourseFromDegreeInList(degreeArrayList* list, char* name){
+  Degree* deg = NULL;         
+  char* token = strtok(name, ",");              //setting up token
+  char* degName = (char* )calloc(strlen(token) + 2, sizeof(char));        //getting the degree name
+  strcpy(degName, token);
+  strcat(degName, "\n");                      
+  deg = findDegree(list, degName);
+  token = strtok(NULL, ",");
+  char* courseName = (char* )calloc(strlen(token) + 2, sizeof(char));      //getting the course name to remove
+  memcpy(courseName, &(token[1]), strlen(token)-2);
+  token = strtok(NULL, ",");
+  if(deg != NULL) {
+    if(removeCourseFromDegree(deg, courseName)) printf("%s removed from degree requirements!\n", courseName);
+    else printf("NOT FOUND!\n");
+  } else {
+    printf("NOT FOUND!\n");
+  }
+  free(token);
+  free(courseName);
+  free(degName);
+}
+
+/*
+ * Function: removeCourseFromDegreeList(degreeArrayList* list, char* name)
+ * --------------------
+ * Removes the specified course any degree that requires it
+ * list: array list of degrees
+ * name: dept and course name in the format of "dept. name, courseName"
+ */
+void removeCourseFromDegreeList(degreeArrayList* list, char* name){    
+  char* token = strtok(name, ",");               //setting up token
+  token = strtok(NULL, ",");
+  char* courseName = (char* )calloc(strlen(token) + 2, sizeof(char));      //getting the course name to remove
+  memcpy(courseName, &(token[1]), strlen(token)-1);
+  token = strtok(NULL, ",");
+  for(int i = 0; i < list->size; i++){
+    removeCourseFromDegree(list->degrees[i], courseName);
+  }
+  printf("%s removed from degree requirements!\n", courseName);
+  free(token);
+  free(courseName);
 }
 
 /*
@@ -108,7 +158,7 @@ void addDegreeToArrayList(degreeArrayList* list, Degree* d){
  * Function: printDegreeArrayList(degreeArrayList* list)
  * --------------------
  * Prints each degree information in array list
- * list: array list of degrees
+ * list: array list of degrees to be printed
  */
 void printDegreeArrayList(degreeArrayList* list){
   for(int i = 0; i < list->size; i++){
@@ -120,11 +170,15 @@ void printDegreeArrayList(degreeArrayList* list){
  * Function: printDegreeNameArrayList(degreeArrayList* list)
  * --------------------
  * Prints each degree name in array list
- * list: array list of degrees
+ * list: array list of degrees to be printed
  */
 void printDegreeNameArrayList(degreeArrayList* list){
-  for(int i = 0; i < list->size; i++){
-    printDegreeName(list->degrees[i]);
+  if (list->size == 0){
+    printf("NOT FOUND\n");
+  } else {
+    for(int i = 0; i < list->size; i++){
+      printDegreeName(list->degrees[i]);
+    }
   }
 }
 
@@ -133,11 +187,15 @@ void printDegreeNameArrayList(degreeArrayList* list){
  * --------------------
  * Prints the full information of given degree in list
  * list: array list of degrees
- * degName: degree name 
+ * degName: degree name in focus
  */
 void printDegreeRequirements(degreeArrayList* list, char* degName){
   Degree* d = findDegree(list, degName);
-  printDegreeReq(d);
+  if(d != NULL){
+    printDegreeReq(d);
+  } else {
+    printf("NOT FOUND\n");
+  }
 }
 
 /*
@@ -145,7 +203,7 @@ void printDegreeRequirements(degreeArrayList* list, char* degName){
  * --------------------
  * Prints the Degrees that require the given course-name in the format required by the command "s "
  * list: array list of degrees 
- * degName: degree name 
+ * name: course name in focus
  */
 void printDegreesRequiringCourse(degreeArrayList* list, char* name){
   degreeArrayList* degs = createDegreeArrayList(1);
@@ -164,17 +222,23 @@ void printDegreesRequiringCourse(degreeArrayList* list, char* name){
  * --------------------
  * Prints the Degrees that require the given course-name in the format required by the command "p c "
  * list: array list of degrees 
- * degName: degree name 
+ * name: degree name to be printed
  */
 void printDegreesWithCourse(degreeArrayList* list, char* name){
   reqLinkedList* degreeNames = createReqLinkedList();
+  int found = 0;
   printf("degrees: ");
   for(int i = 0; i < list->size; i++){
     if(findCourseInDegree(list->degrees[i], name) == 1){
       addDegreeNameToLinkedList(list->degrees[i], degreeNames);
+      found = 1;
     }
   }
-  printRequirements(degreeNames);
+  if(found == 1){
+    printRequirements(degreeNames);
+  } else {
+    printf("NOT FOUND\n");
+  }
   freeReqLinkedList(degreeNames);
 }
 
@@ -182,7 +246,7 @@ void printDegreesWithCourse(degreeArrayList* list, char* name){
  * Function: freeDegreeArrayList(degreeArrayList* list)
  * --------------------
  * frees heap space used for the array list
- * list: array list of degrees
+ * list: array list of degrees to be freed
  */
 void freeDegreeArrayList(degreeArrayList* list){
 	int length = list->size;

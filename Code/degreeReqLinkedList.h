@@ -17,15 +17,12 @@ typedef struct degreeReqLinkedList{
 /*
  * Function: createDegreeReqLinkedList
  * --------------------
- * Creates and initializes a linked list of degrees to be used by the caller
- * Returns: Linked List of Degrees
  */
 extern degreeReqLinkedList* createDegreeReqLinkedList();
 
 /*
  * Function: insertDegreeReqLinkedList(degreeReqLinkedList* list, reqLinkedList* l)
  * --------------------
- * Inserts a string into the specified list
  * list: linked list of degrees
  * l: linked list of course names
  */
@@ -34,17 +31,37 @@ extern void insertDegreeReqLinkedList(degreeReqLinkedList* list, reqLinkedList* 
  /*
  * Function: printDegreeCourses(degreeReqLinkedList* list)
  * --------------------
- * Prints the course-names that are required for the degree
- * list: linked list
+ * list: linked list of degrees to be printed
  */
 extern void printDegreeCourses(degreeReqLinkedList* list);
 
 /*
+ * Function: int removeCourseFromDegreeReq(degreeReqLinkedList* l, char* n)
+ * --------------------
+ * l: degree requirements list
+ * n: course name to be removed
+ */
+extern int removeCourseFromDegreeReq(degreeReqLinkedList* l, char* n);
+
+/*
+ * Function:  removeEmptyNode(degreeReqLinkedList* list) 
+ * --------------------
+ * list: linked list in focus
+ */
+extern void removeEmptyNode(degreeReqLinkedList* list);
+
+/*
  * Function: freeDegreeReqLinkedList(degreeReqLinkedList* list)
  * --------------------
- * Frees heap space used by the strings in list
- * list: linked list
+ * list: linked list to be freed
  */
 extern void freeDegreeReqLinkedList(degreeReqLinkedList* list);
+
+/*
+ * Function: freeRLNode(RNode* n)
+ * --------------------
+ * n: node to be freed
+ */
+extern void freeRLNode(RLNode* n);
 
 #endif 

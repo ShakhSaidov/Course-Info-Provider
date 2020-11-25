@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "courseArrayList.h"
+#include "courseTree.h"
 #include "reqLinkedList.h"
 #include "department.h"
 #include "course.h"
@@ -22,7 +22,7 @@ Department* createDepartment(){
  * --------------------
  * Mallocs a space for a name and sets the name of the Department
  * d: department in focus
- * n: string name
+ * n: department's name to be given
  */
 void setDepartmentName(Department* d, char* n){
   d->name = (char* )calloc(strlen(n) + 1, sizeof(char));
@@ -30,14 +30,14 @@ void setDepartmentName(Department* d, char* n){
 }
 
 /*
- * Function: addCourseListToDept(Department* d, courseArrayList* c)
+ * Function: addCourseTreeToDept(Department* d, courseTree* c)
  * --------------------
  * Adds a list of courses into given department
  * d: department in focus
- * c: array list of courses
+ * c: array list of courses to add onto department
  */
-void addCourseListToDept(Department* d, courseArrayList* c){
-  d->list = c;
+void addCourseTreeToDept(Department* d, courseTree* c){
+  d->tree = c;
 }
 
 /*
@@ -53,7 +53,7 @@ Department* readDepartmentFile(FILE* f){
   ssize_t read;
   
   Department* d = createDepartment();
-  courseArrayList* courseList = createCourseArrayList(1);
+  courseTree* courseTree = createCourseTree();
   read = getline(&line, &len, f);                         //reads file line-by-line. line now has DEPARTMENT
   if(line[0] != '\n') line[strlen(line)-1] = 0;           //getting rid of '\n'
   setDepartmentName(d, line);
@@ -81,9 +81,9 @@ Department* readDepartmentFile(FILE* f){
       line[strlen(line)-1] = 0;                           //getting rid of '\n'
       addReqListToCourse(reqList, c, line); 
     }
-    addCourseToArrayList(courseList, c);
+    addCourseToTree(courseTree, c);
   }
-  addCourseListToDept(d, courseList);
+  addCourseTreeToDept(d, courseTree);
   free(line);
   return d;
 }
@@ -93,22 +93,34 @@ Department* readDepartmentFile(FILE* f){
  * --------------------
  * Looks if a given course-name is a part of the department
  * d: department in focus
- * n: course name
+ * n: course name to be searched for
  * Returns: Course with the given name
  */
 Course* findCourseInDept(Department* d, char* n){
-  return findCourseInList(d->list, n);
+  return findCourseInTree(d->tree->root, n);
+}
+
+/*
+ * Function: int removeCourseFromDept(Department* d, char* n)
+ * --------------------
+ * Removes the given course from the department requirements and as a course pre-requisite
+ * d: department in focus
+ * n: course name to be removed
+ * Returns: 1 if course was removed, 0 otherwise
+ */
+int removeCourseFromDept(Department* d, char* n){
+  return removeCourseFromDeptReq(d->tree, n);
 }
 
 /*
  * Function: printDepartment(Department* d)
  * --------------------
  * Prints the full department information
- * d: department in focus
+ * d: department to be printed
  */
 void printDepartment(Department* d){
   printf("%s", d->name);
-  printCourseArrayList(d->list);
+  printCourseTree(d->tree->root);
   printf("\n");
 }
 
@@ -116,10 +128,10 @@ void printDepartment(Department* d){
  * Function: freeDepartment(Department* d)
  * --------------------
  * Frees the heap space used by a given department
- * d: department in focus
+ * d: department to be freed
  */
 void freeDepartment(Department* d){
-  freeCourseArrayList(d->list);
+  freeCourseTree(d->tree);
   free(d->name);
   free(d);
 }

@@ -24,7 +24,7 @@ Degree* createDegree(){
  * --------------------
  * Mallocs a space for a name and sets the name of the Degree 
  * d: degree in focus
- * n: string name
+ * n: name to be given to degree
  */
 void setDegreeName(Degree* d, char* n){
   d->name = (char* )calloc(strlen(n) + 1, sizeof(char));
@@ -35,7 +35,7 @@ void setDegreeName(Degree* d, char* n){
  * Function: addDegreeNameToLinkedList(Degree* d, reqLinkedList* l)
  * --------------------
  * Adds a degree-name to a linked list
- * d: degree in focus
+ * d: degree whose name will be added to list
  * l: linked list
  */
 void addDegreeNameToLinkedList(Degree* d, reqLinkedList* l){
@@ -51,7 +51,7 @@ void addDegreeNameToLinkedList(Degree* d, reqLinkedList* l){
  * --------------------
  * Adds a list of course-names to the given degree
  * d: degree in focus
- * l: line of course-names
+ * l: line of course-names to be added to degree
  */
 void addListToDegree(Degree* d, char* l){
   reqLinkedList* reqList = createReqLinkedList();
@@ -103,7 +103,7 @@ Degree* readDegreeFile(FILE* f){
  * --------------------
  * Looks if a given course-name is required by the degree
  * d: degree in focus
- * n: course name
+ * n: course name to be searched for
  * Returns: 1 if course-name is found, 0 otherwise
  */
 int findCourseInDegree(Degree* d, char* n){
@@ -112,11 +112,20 @@ int findCourseInDegree(Degree* d, char* n){
   while(iter1 != NULL){
     RNode* iter2 = iter1->list->head;    //course in course list
     while(iter2 != NULL){
-      if(strcmp(iter2->name, n) == 0){
+      char* courseName = (char* )calloc(strlen(iter2->name) + 1, sizeof(char));
+      if((iter2->name)[0] == 'O'){                                          //if course is a disjunct
+        memcpy(courseName, &((iter2->name)[3]), strlen(iter2->name) - 3);
+      } else {
+        strcpy(courseName, iter2->name);
+      }
+  
+      if(strcmp(courseName, n) == 0){
         found = 1;
+        free(courseName);
         break;
       } 
       iter2 = iter2->next;
+      free(courseName);
     }
     if(found == 1){
       break;
@@ -126,12 +135,22 @@ int findCourseInDegree(Degree* d, char* n){
   return found;
 }
 
+/*
+ * Function: int removeCourseFromDegree(Degree* d, char* n)
+ * --------------------
+ * Removes the given course from the degree requirements
+ * d: degree in focus
+ * n: course name to be removed from degree
+ */
+int removeCourseFromDegree(Degree* d, char* n){
+  return removeCourseFromDegreeReq(d->list, n);
+}
 
 /*
  * Function: printDegreeReq(Degree* d)
  * --------------------
  * Prints the course-names that are required for the degree line-by-line
- * d: degree in focus
+ * d: degree to be printed
  */
 void printDegreeReq(Degree* d){
   printDegreeCourses(d->list);
@@ -141,7 +160,7 @@ void printDegreeReq(Degree* d){
  * Function: printDegree(Degree* d)
  * --------------------
  * Prints the full degree information
- * d: degree in focus
+ * d: degree to be printed
  */
 void printDegree(Degree* d){
   printf("%s", d->name);
@@ -153,7 +172,7 @@ void printDegree(Degree* d){
  * Function: printDegreeName(Degree* d)
  * --------------------
  * Prints only the degree name
- * d: degree in focus
+ * d: degree to be printed
  */
 void printDegreeName(Degree* d){
   printf("%s", d->name);
@@ -163,7 +182,7 @@ void printDegreeName(Degree* d){
  * Function: freeDegree(Degree* d)
  * --------------------
  * Frees the heap space used by a given degree
- * d: degree in focus
+ * d: degree to be freed
  */
 void freeDegree(Degree* d){
   freeDegreeReqLinkedList(d->list);

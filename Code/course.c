@@ -12,6 +12,9 @@
  */
 Course* createCourse(){
   Course* c = (Course* )malloc(sizeof(Course));
+  c->name = NULL;
+  c->title = NULL;
+  c->list = NULL;
   return c;
 }
 
@@ -20,7 +23,7 @@ Course* createCourse(){
  * --------------------
  * Sets the given course's name with passed string
  * c: course in focus
- * n: name of course
+ * n: name to be given to course
  */
 void setCourseName(Course* c, char* n){
   c->name = (char* )calloc(strlen(n) + 1, sizeof(char));   
@@ -32,7 +35,7 @@ void setCourseName(Course* c, char* n){
  * --------------------
  * Sets the given course's title with passed string
  * c: course in focus
- * t: title of course
+ * t: title to be given to course
  */
 void setCourseTitle(Course* c, char* t){
   c->title = (char* )calloc(strlen(t) + 1, sizeof(char)); 
@@ -45,15 +48,23 @@ void setCourseTitle(Course* c, char* t){
  * Adds a linked list of pre-requisited into passed course
  * l: linked list of pre-requisites
  * c: course in focus
- * n: file-line that lists pre-requisites
+ * n: full line of pre-requisites
  */
 void addReqListToCourse(reqLinkedList* l, Course* c, char* n){
-  char* token = strtok(n, ",");
+  char* reqs = (char* )calloc(strlen(n) + 1, sizeof(char));
+  if(n[0] == ' '){
+    memcpy(reqs, &n[1], strlen(n) - 1);
+  } else{
+    strcpy(reqs, n);
+  }
+  
+  char* token = strtok(reqs, ",");
   while(token != NULL){
     insertReqLinkedList(l, token);
     token = strtok(NULL, ",");
   }
   c->list = l;
+  free(reqs);
   free(token);
 }
 
@@ -61,7 +72,7 @@ void addReqListToCourse(reqLinkedList* l, Course* c, char* n){
  * Function: printCourse(Course* c)
  * --------------------
  * Prints full course information 
- * c: course in focus
+ * c: course to be printed
  */
 void printCourse(Course* c){
   printf("%s", c->name);
@@ -74,7 +85,7 @@ void printCourse(Course* c){
  * Function: printPrerequisites(Course* c)
  * --------------------
  * Prints the given course's pre-requisites only
- * c: course in focus
+ * c: course to be printed
  */
 void printPrerequisites(Course* c){
   printRequirements(c->list);
@@ -84,7 +95,7 @@ void printPrerequisites(Course* c){
  * Function: printCourseOnly(Course* c)
  * --------------------
  * Prints the given course's name only
- * c: course in focus
+ * c: course to be printed
  */
 void printCourseOnly(Course* c){
   printf("%s\n", c->name);
@@ -94,11 +105,11 @@ void printCourseOnly(Course* c){
  * Function: freeCourse(Course* c)
  * --------------------
  * Frees heap space used by course
- * c: course in focus
+ * c: course to be freed
  */
 void freeCourse(Course* c){
-  freeReqLinkedList(c->list);
-  free(c->name);
-  free(c->title);
-  free(c);
+  if(c->list != NULL) freeReqLinkedList(c->list);
+  if(c->name != NULL) free(c->name);
+  if(c->title != NULL) free(c->title);
+  if(c != NULL) free(c);
 }
